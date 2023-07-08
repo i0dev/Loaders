@@ -1,6 +1,6 @@
-package com.i0dev.vouchers.util;
+package com.i0dev.loaders.util;
 
-import com.i0dev.vouchers.VouchersPlugin;
+import com.i0dev.loaders.LoadersPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -246,7 +246,7 @@ public class ItemBuilder extends ItemStack {
     public ItemBuilder addPDCValue(String key, String value) {
         ItemMeta im = getItemMeta();
         PersistentDataContainer pdc = im.getPersistentDataContainer();
-        pdc.set(new NamespacedKey(VouchersPlugin.get(), key), PersistentDataType.STRING, value);
+        pdc.set(new NamespacedKey(LoadersPlugin.get(), key), PersistentDataType.STRING, value);
         setItemMeta(im);
         return this;
     }
@@ -282,7 +282,7 @@ public class ItemBuilder extends ItemStack {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return null;
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        return pdc.get(new NamespacedKey(VouchersPlugin.get(), key), PersistentDataType.STRING);
+        return pdc.get(new NamespacedKey(LoadersPlugin.get(), key), PersistentDataType.STRING);
     }
 
 

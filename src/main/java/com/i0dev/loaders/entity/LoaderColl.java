@@ -1,12 +1,12 @@
-package com.i0dev.vouchers.entity;
+package com.i0dev.loaders.entity;
 
 import com.massivecraft.massivecore.store.Coll;
 
-public class VoucherColl extends Coll<Voucher> {
+public class LoaderColl extends Coll<Loader> {
 
-    private static final VoucherColl i = new VoucherColl();
+    private static final LoaderColl i = new LoaderColl();
 
-    public static VoucherColl get() {
+    public static LoaderColl get() {
         return i;
     }
 

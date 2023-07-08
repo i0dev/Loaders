@@ -1,6 +1,6 @@
-package com.i0dev.vouchers.util;
+package com.i0dev.loaders.util;
 
-import com.i0dev.vouchers.entity.MLang;
+import com.i0dev.loaders.entity.MLang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

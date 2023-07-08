@@ -1,4 +1,4 @@
-package org.jdgames.koth.utils;
+package com.i0dev.loaders.util;
 
 import org.bukkit.Location;
 import org.bukkit.World;

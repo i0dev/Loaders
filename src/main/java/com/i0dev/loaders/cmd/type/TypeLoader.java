@@ -1,34 +1,34 @@
-package com.i0dev.vouchers.cmd.type;
+package com.i0dev.loaders.cmd.type;
 
-import com.i0dev.vouchers.entity.Voucher;
-import com.i0dev.vouchers.entity.VoucherColl;
+import com.i0dev.loaders.entity.Loader;
+import com.i0dev.loaders.entity.LoaderColl;
 import com.massivecraft.massivecore.command.type.TypeAbstractChoice;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
 
-public class TypeVoucher extends TypeAbstractChoice<Voucher> {
+public class TypeLoader extends TypeAbstractChoice<Loader> {
 
-    private static final TypeVoucher i = new TypeVoucher();
+    private static final TypeLoader i = new TypeLoader();
 
-    public static TypeVoucher get() {
+    public static TypeLoader get() {
         return i;
     }
 
-    public TypeVoucher() {
-        super(Voucher.class);
+    public TypeLoader() {
+        super(Loader.class);
     }
 
     public String getName() {
         return "text";
     }
 
-    public Voucher read(String arg, CommandSender sender) {
-        return Voucher.get(arg);
+    public Loader read(String arg, CommandSender sender) {
+        return Loader.get(arg);
     }
 
     public Collection<String> getTabList(CommandSender sender, String arg) {
-        return VoucherColl.get().getIds();
+        return LoaderColl.get().getIds();
     }
 }
 

@@ -1,4 +1,4 @@
-package com.i0dev.vouchers.util;
+package com.i0dev.loaders.util;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

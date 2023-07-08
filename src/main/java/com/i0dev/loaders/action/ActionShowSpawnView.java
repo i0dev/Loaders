@@ -1,26 +1,30 @@
 package com.i0dev.loaders.action;
 
+import com.i0dev.loaders.task.TaskSpawnParticle;
 import com.massivecraft.massivecore.chestgui.ChestAction;
 import lombok.AllArgsConstructor;
 import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.trait.Gravity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 @AllArgsConstructor
-public class ActionToggleGravity implements ChestAction {
+public class ActionShowSpawnView implements ChestAction {
 
     NPC npc;
 
     @Override
-    public boolean onClick(InventoryClickEvent inventoryClickEvent) {
-        if (npc.getTraitNullable(Gravity.class).hasGravity()) {
-            npc.removeTrait(Gravity.class);
-            npc.getOrAddTrait(Gravity.class).gravitate(true);
-        } else {
-            npc.removeTrait(Gravity.class);
-            npc.getOrAddTrait(Gravity.class).gravitate(false);
+    public boolean onClick(InventoryClickEvent e) {
+        e.getWhoClicked().closeInventory();
+
+        if (TaskSpawnParticle.get().contains((Player) e.getWhoClicked())) {
+            e.getWhoClicked().sendMessage("§cYou already have a spawn view opened!");
+            return true;
         }
-        inventoryClickEvent.getWhoClicked().sendMessage("§aGravity toggled to " + npc.getTraitNullable(Gravity.class).hasGravity() + "!");
+
+        e.getWhoClicked().sendMessage("§aSpawn view opened for 30s!");
+
+        TaskSpawnParticle.get().addView((Player) e.getWhoClicked(), npc, System.currentTimeMillis() + 30000L);
         return true;
     }
+
 }

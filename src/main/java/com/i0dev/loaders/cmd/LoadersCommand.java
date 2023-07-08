@@ -2,8 +2,8 @@ package com.i0dev.loaders.cmd;
 
 import com.massivecraft.massivecore.command.MassiveCommand;
 
-public class GlobalCurrencyCommand extends MassiveCommand {
-    public GlobalCurrencyCommand() {
+public class LoadersCommand extends MassiveCommand {
+    public LoadersCommand() {
         this.setSetupEnabled(true);
     }
 }

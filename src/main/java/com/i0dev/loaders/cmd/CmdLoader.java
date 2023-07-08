@@ -8,14 +8,15 @@ import com.massivecraft.massivecore.command.requirement.RequirementHasPerm;
 
 import java.util.List;
 
-public class CmdGlobalCurrency extends GlobalCurrencyCommand {
+public class CmdLoader extends LoadersCommand {
 
-    private static CmdGlobalCurrency i = new CmdGlobalCurrency();
+    private static CmdLoader i = new CmdLoader();
 
-    public Cmd
+    public CmdLoaderGive cmdLoaderGive = new CmdLoaderGive();
+    public CmdLoaderView cmdLoaderView = new CmdLoaderView();
     public MassiveCommandVersion cmdFactionsVersion = new MassiveCommandVersion(LoadersPlugin.get()).setAliases("v", "version").addRequirements(RequirementHasPerm.get(Perm.VERSION));
 
-    public static CmdGlobalCurrency get() {
+    public static CmdLoader get() {
         return i;
     }
 

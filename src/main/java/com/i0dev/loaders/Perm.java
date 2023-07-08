@@ -1,4 +1,4 @@
-package com.i0dev.globalcurrency;
+package com.i0dev.loaders;
 
 import com.massivecraft.massivecore.Identified;
 import com.massivecraft.massivecore.util.PermissionUtil;
@@ -8,19 +8,15 @@ public enum Perm implements Identified {
 
     BASECOMMAND,
 
-    ADD,
-    BALANCE,
-    BALANCEOTHERS,
-    REMOVE,
-    SET,
-    SHOP,
+    GIVE,
+    VIEW,
 
     VERSION;
 
     private final String id;
 
     Perm() {
-        this.id = PermissionUtil.createPermissionId(GlobalCurrencyPlugin.get(), this);
+        this.id = PermissionUtil.createPermissionId(LoadersPlugin.get(), this);
     }
 
     @Override
