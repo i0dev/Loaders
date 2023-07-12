@@ -72,9 +72,9 @@ public class EngineLoader extends Engine {
         npc.data().setPersistent(NPC.Metadata.REMOVE_FROM_PLAYERLIST, false);
         npc.getOrAddTrait(Gravity.class).gravitate(true);
         SkinTrait trait = npc.getOrAddTrait(SkinTrait.class);
+        trait.setFetchDefaultSkin(false);
         trait.setShouldUpdateSkins(true);
-        trait.setFetchDefaultSkin(true);
-        trait.setSkinName(faction.isSystemFaction() ? "steve" : faction.getLeader().getPlayer().getName(), true);
+        trait.setSkinName(faction.isSystemFaction() ? "steve" : faction.getLeader().getPlayer().getName());
 
         npc.getOrAddTrait(LoaderTrait.class).setIDS(faction.getId(), loader.getId());
         npc.spawn(location);

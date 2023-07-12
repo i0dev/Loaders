@@ -16,9 +16,9 @@ import net.citizensnpcs.api.npc.SimpleNPCDataStore;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.citizensnpcs.api.util.Storage;
 import net.citizensnpcs.api.util.YamlStorage;
+import net.citizensnpcs.trait.SkinTrait;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoadersPlugin extends MassivePlugin {
