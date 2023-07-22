@@ -5,7 +5,7 @@ website: ${project.url}
 authors: [ i01 ]
 depend: [ MassiveCore, Factions, Citizens ]
 description: ${project.description}
-api-version: 1.19
+api-version: 1.20
 permissions:
   loaders.basecommand: { description: loaders basecommand, default: false }
   loaders.version: { description: check version, default: false }
