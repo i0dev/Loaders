@@ -72,7 +72,7 @@ public class LoaderTrait extends Trait {
     private Inventory getLoaderInventory() {
         Faction faction = Faction.get(factionID) == null ? Faction.get("none") : Faction.get(factionID);
 
-        Inventory inventory = Bukkit.getServer().createInventory(null, 27, Utils.color(MConf.get().manageLoaderTitle));
+        Inventory inventory = Bukkit.getServer().createInventory(null, MConf.get().manageLoaderGuiSize, Utils.color(MConf.get().manageLoaderTitle));
         ChestGui chestGui = ChestGui.getCreative(inventory);
 
         chestGui.setAutoclosing(false);
@@ -80,7 +80,7 @@ public class LoaderTrait extends Trait {
         chestGui.setSoundOpen(null);
         chestGui.setSoundClose(null);
 
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < MConf.get().manageLoaderGuiSize; i++) {
             chestGui.getInventory().setItem(i, MConf.get().borderItem.getItemStack());
         }
 

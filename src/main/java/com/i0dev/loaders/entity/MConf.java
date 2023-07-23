@@ -19,11 +19,12 @@ public class MConf extends Entity<MConf> {
     }
 
     public List<String> aliases = MUtil.list("loaders");
-
-    public long spawnViewTime = 30L;
-
     public Sound placeLoaderSound = Sound.BLOCK_NOTE_BLOCK_BELL;
 
+    public long spawnViewTime = 30L;
+    public int maxLoadersView = 5;
+
+    public int manageLoaderGuiSize = 27;
     public String manageLoaderTitle = "&aManage Loader";
     public ConfigItem borderItem = new ConfigItem(
             Material.BLACK_STAINED_GLASS_PANE,

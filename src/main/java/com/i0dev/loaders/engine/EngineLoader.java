@@ -6,6 +6,7 @@ import com.i0dev.loaders.entity.MConf;
 import com.i0dev.loaders.entity.MLang;
 import com.i0dev.loaders.integration.LoaderTrait;
 import com.i0dev.loaders.util.ItemBuilder;
+import com.i0dev.loaders.util.Utils;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
@@ -50,20 +51,20 @@ public class EngineLoader extends Engine {
         if (loader == null) return;
         e.setCancelled(true);
         if (!e.getBlockFace().equals(BlockFace.UP)) {
-            player.sendMessage(MLang.get().onlyPlaceLoadersOnTopOfBlocks);
+            player.sendMessage(Utils.prefixAndColor(MLang.get().onlyPlaceLoadersOnTopOfBlocks));
             return;
         }
         Location location = clickedBlock.getLocation().clone().add(.5, 1, .5);
 
         Faction faction = MPlayer.get(player).getFaction();
         if (faction.isSystemFaction()) {
-            player.sendMessage(MLang.get().cantPlaceLoadersInSystemFactions);
+            player.sendMessage(Utils.prefixAndColor(MLang.get().cantPlaceLoadersInSystemFactions));
             return;
         }
 
         Faction factionAtLocation = BoardColl.get().getFactionAt(PS.valueOf(location));
         if (!factionAtLocation.getId().equals(faction.getId())) {
-            player.sendMessage(MLang.get().canOnlyPlaceLoadersInYourOwnLand);
+            player.sendMessage(Utils.prefixAndColor(MLang.get().canOnlyPlaceLoadersInYourOwnLand));
 
             return;
         }
