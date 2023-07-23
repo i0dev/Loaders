@@ -2,7 +2,9 @@ package com.i0dev.loaders.action;
 
 import com.i0dev.loaders.LoadersPlugin;
 import com.i0dev.loaders.entity.Loader;
+import com.i0dev.loaders.entity.MLang;
 import com.i0dev.loaders.integration.LoaderTrait;
+import com.i0dev.loaders.util.Utils;
 import com.massivecraft.massivecore.chestgui.ChestAction;
 import lombok.AllArgsConstructor;
 import net.citizensnpcs.api.npc.NPC;
@@ -20,6 +22,8 @@ public class ActionDeleteLoader implements ChestAction {
 
         inventoryClickEvent.getWhoClicked().closeInventory();
         inventoryClickEvent.getWhoClicked().getInventory().addItem(loader.getItemStack(1));
+
+        inventoryClickEvent.getWhoClicked().sendMessage(Utils.prefixAndColor(MLang.get().deletedLoader));
 
         npc.destroy();
         LoadersPlugin.get().getNpcRegistry().saveToStore();

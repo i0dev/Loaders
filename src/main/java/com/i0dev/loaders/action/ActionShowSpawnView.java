@@ -1,6 +1,9 @@
 package com.i0dev.loaders.action;
 
+import com.i0dev.loaders.entity.MConf;
+import com.i0dev.loaders.entity.MLang;
 import com.i0dev.loaders.task.TaskSpawnParticle;
+import com.i0dev.loaders.util.Utils;
 import com.massivecraft.massivecore.chestgui.ChestAction;
 import lombok.AllArgsConstructor;
 import net.citizensnpcs.api.npc.NPC;
@@ -17,13 +20,13 @@ public class ActionShowSpawnView implements ChestAction {
         e.getWhoClicked().closeInventory();
 
         if (TaskSpawnParticle.get().contains((Player) e.getWhoClicked())) {
-            e.getWhoClicked().sendMessage("§cYou already have a spawn view opened!");
+            e.getWhoClicked().sendMessage(Utils.prefixAndColor(MLang.get().alreadyViewOpen));
             return true;
         }
 
-        e.getWhoClicked().sendMessage("§aSpawn view opened for 30s!");
+        e.getWhoClicked().sendMessage(Utils.prefixAndColor(MLang.get().spawnViewOpened));
 
-        TaskSpawnParticle.get().addView((Player) e.getWhoClicked(), npc, System.currentTimeMillis() + 30000L);
+        TaskSpawnParticle.get().addView((Player) e.getWhoClicked(), npc, System.currentTimeMillis() + (MConf.get().spawnViewTime * 1000L));
         return true;
     }
 

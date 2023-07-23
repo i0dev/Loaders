@@ -2,6 +2,8 @@ package com.i0dev.loaders.engine;
 
 import com.i0dev.loaders.LoadersPlugin;
 import com.i0dev.loaders.entity.Loader;
+import com.i0dev.loaders.entity.MConf;
+import com.i0dev.loaders.entity.MLang;
 import com.i0dev.loaders.integration.LoaderTrait;
 import com.i0dev.loaders.util.ItemBuilder;
 import com.massivecraft.factions.entity.BoardColl;
@@ -48,24 +50,25 @@ public class EngineLoader extends Engine {
         if (loader == null) return;
         e.setCancelled(true);
         if (!e.getBlockFace().equals(BlockFace.UP)) {
-            player.sendMessage("You can only place loaders on the top of blocks.");
+            player.sendMessage(MLang.get().onlyPlaceLoadersOnTopOfBlocks);
             return;
         }
         Location location = clickedBlock.getLocation().clone().add(.5, 1, .5);
 
         Faction faction = MPlayer.get(player).getFaction();
         if (faction.isSystemFaction()) {
-            player.sendMessage("You can't place loaders in system factions.");
+            player.sendMessage(MLang.get().cantPlaceLoadersInSystemFactions);
             return;
         }
 
         Faction factionAtLocation = BoardColl.get().getFactionAt(PS.valueOf(location));
         if (!factionAtLocation.getId().equals(faction.getId())) {
-            player.sendMessage("You can only place loaders in your own faction.");
+            player.sendMessage(MLang.get().canOnlyPlaceLoadersInYourOwnLand);
+
             return;
         }
 
-        // TODO add mperm check?
+        // TODO add mperm check ? ? ?
 
         NPCRegistry registry = LoadersPlugin.get().getNpcRegistry();
         NPC npc = registry.createNPC(EntityType.PLAYER, "&2" + faction.getName() + "'s Loader");
@@ -82,7 +85,7 @@ public class EngineLoader extends Engine {
 
         forceLoadChunks(location, loader.chunkLoadRadius);
 
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+        player.playSound(player.getLocation(), MConf.get().placeLoaderSound, 1, 1);
 
         itemInHand.setAmount(itemInHand.getAmount() - 1);
         e.getPlayer().updateInventory();

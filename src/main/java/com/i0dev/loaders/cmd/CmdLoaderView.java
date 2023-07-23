@@ -1,6 +1,7 @@
 package com.i0dev.loaders.cmd;
 
 import com.i0dev.loaders.LoadersPlugin;
+import com.i0dev.loaders.entity.MLang;
 import com.i0dev.loaders.integration.LoaderTrait;
 import com.i0dev.loaders.task.TaskSpawnParticle;
 import com.massivecraft.factions.entity.Faction;
@@ -24,12 +25,9 @@ public class CmdLoaderView extends LoadersCommand {
     public void perform() {
 
         if (TaskSpawnParticle.get().contains(me)) {
-            msg("§cYou already have a spawn view opened!");
+            msg(MLang.get().alreadyViewOpen);
             return;
         }
-
-        msg("§aShowing all loaders spawner load range for your faction!");
-        msg("§aThese particles will disappear in 30 seconds");
 
         String playerFactionID = MPlayer.get(me).getFaction().getId();
         LoadersPlugin.get().getNpcRegistry().iterator().forEachRemaining(npc -> {
@@ -39,6 +37,7 @@ public class CmdLoaderView extends LoadersCommand {
             TaskSpawnParticle.get().addView(me, npc, System.currentTimeMillis() + 30000L);
         });
 
+        msg(MLang.get().spawnViewOpened);
     }
 
 }

@@ -8,9 +8,13 @@ description: ${project.description}
 api-version: 1.20
 permissions:
   loaders.basecommand: { description: loaders basecommand, default: false }
+  loaders.view: { description: view loaders, default: false }
+  loaders.give: { description: give loaders, default: false }
   loaders.version: { description: check version, default: false }
   loaders.*:
     loaders.basecommand: true
+    loaders.view: true
+    loaders.give: true
     loaders.version: true
   loaders.kit.op:
     default: op
@@ -20,6 +24,7 @@ permissions:
     default: false
     children:
       loaders.basecommand: true
+      loaders.view: true
   loaders.kit.default:
     default: true
     children:

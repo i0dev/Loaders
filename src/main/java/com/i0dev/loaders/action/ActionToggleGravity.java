@@ -1,5 +1,7 @@
 package com.i0dev.loaders.action;
 
+import com.i0dev.loaders.entity.MLang;
+import com.i0dev.loaders.util.Utils;
 import com.massivecraft.massivecore.chestgui.ChestAction;
 import lombok.AllArgsConstructor;
 import net.citizensnpcs.api.npc.NPC;
@@ -16,12 +18,13 @@ public class ActionToggleGravity implements ChestAction {
         if (npc.getTraitNullable(Gravity.class).hasGravity()) {
             npc.removeTrait(Gravity.class);
             npc.getOrAddTrait(Gravity.class).gravitate(true);
+            inventoryClickEvent.getWhoClicked().sendMessage(Utils.prefixAndColor(MLang.get().gravityToggledOff));
         } else {
             npc.removeTrait(Gravity.class);
             npc.getOrAddTrait(Gravity.class).gravitate(false);
+            inventoryClickEvent.getWhoClicked().sendMessage(Utils.prefixAndColor(MLang.get().gravityToggledOn));
         }
         inventoryClickEvent.getWhoClicked().closeInventory();
-        inventoryClickEvent.getWhoClicked().sendMessage("§aGravity toggled to " + npc.getTraitNullable(Gravity.class).hasGravity() + "!");
         return true;
     }
 }

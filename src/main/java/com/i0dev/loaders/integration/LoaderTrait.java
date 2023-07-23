@@ -5,20 +5,23 @@ import com.i0dev.loaders.action.ActionShowSpawnView;
 import com.i0dev.loaders.action.ActionToggleGravity;
 import com.i0dev.loaders.engine.EngineLoader;
 import com.i0dev.loaders.entity.Loader;
+import com.i0dev.loaders.entity.MConf;
+import com.i0dev.loaders.entity.MLang;
 import com.i0dev.loaders.util.ItemBuilder;
+import com.i0dev.loaders.util.Pair;
 import com.i0dev.loaders.util.Utils;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.chestgui.ChestGui;
 import com.massivecraft.massivecore.ps.PS;
-import com.massivecraft.massivecore.util.MUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
+import net.citizensnpcs.trait.Gravity;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -57,7 +60,7 @@ public class LoaderTrait extends Trait {
         Faction factionAtLocation = BoardColl.get().getFactionAt(PS.valueOf(npc.getStoredLocation()));
         if (!factionAtLocation.isNone()) {
             if (!factionAtLocation.getId().equals(MPlayer.get(e.getClicker()).getFaction().getId())) {
-                e.getClicker().sendMessage(Utils.color("&cYou can't manage this loader because it's not in your factions land!"));
+                e.getClicker().sendMessage(Utils.prefixAndColor(MLang.get().cantManageLoadersInNotYourOwnLand));
                 return;
             }
         }
@@ -67,7 +70,9 @@ public class LoaderTrait extends Trait {
 
 
     private Inventory getLoaderInventory() {
-        Inventory inventory = Bukkit.getServer().createInventory(null, 27, Utils.color("&cManage " + Faction.get(factionID).getName() + "'s Loader"));
+        Faction faction = Faction.get(factionID) == null ? Faction.get("none") : Faction.get(factionID);
+
+        Inventory inventory = Bukkit.getServer().createInventory(null, 27, Utils.color(MConf.get().manageLoaderTitle));
         ChestGui chestGui = ChestGui.getCreative(inventory);
 
         chestGui.setAutoclosing(false);
@@ -76,31 +81,26 @@ public class LoaderTrait extends Trait {
         chestGui.setSoundClose(null);
 
         for (int i = 0; i < 27; i++) {
-            chestGui.getInventory().setItem(i, new com.massivecraft.factions.util.ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).addGlow(true).name("&7"));
+            chestGui.getInventory().setItem(i, MConf.get().borderItem.getItemStack());
         }
 
-        chestGui.getInventory().setItem(4, new ItemBuilder(Material.PAPER)
-                .name("&aLoader Information")
-                .lore(MUtil.list(
-                        "",
-                        "&cThis loader is owned by " + Faction.get(factionID).getName(),
-                        "&cIt will load all spawners within 16 blocks",
-                        "&cIt will load all chunks within " + Loader.get(loaderID).getChunkLoadRadius() + " blocks",
-                        "",
-                        "&cClick the barrier to remove this loader, and get the spawn egg back",
-                        "&cClick the eye to view the spawner range",
-                        "&cClick the elytra to toggle gravity"
-                ))
-        );
+        chestGui.getInventory().setItem(MConf.get().infoSlot, MConf.get().infoItem.getItemStack(
+                new Pair<>("%faction%", faction.getName()),
+                new Pair<>("%radius%", String.valueOf(Loader.get(loaderID).getChunkLoadRadius()))
+        ));
 
-        chestGui.getInventory().setItem(11, new ItemBuilder(Material.ELYTRA).name("&cToggle Gravity"));
-        chestGui.setAction(11, new ActionToggleGravity(this.getNPC()));
+        chestGui.getInventory().setItem(MConf.get().toggleGravitySlot, MConf.get().toggleGravityItem.getItemStack(
+                new Pair<>("%state%", npc.getTrait(Gravity.class).hasGravity() ? MConf.get().enabledState : MConf.get().disabledState)
+        ));
+        chestGui.setAction(MConf.get().toggleGravitySlot, new ActionToggleGravity(this.getNPC()));
 
-        chestGui.getInventory().setItem(13, new ItemBuilder(Material.ENDER_EYE).name("&aView spawner range"));
-        chestGui.setAction(13, new ActionShowSpawnView(this.getNPC()));
+        chestGui.getInventory().setItem(MConf.get().viewRangeSlot, MConf.get().viewSpawnerRangeItem.getItemStack(
+                new Pair<>("%time%", String.valueOf(MConf.get().spawnViewTime))
+        ));
+        chestGui.setAction(MConf.get().viewRangeSlot, new ActionShowSpawnView(this.getNPC()));
 
-        chestGui.getInventory().setItem(15, new ItemBuilder(Material.BARRIER).name("&cRemove Loader"));
-        chestGui.setAction(15, new ActionDeleteLoader(this.getNPC()));
+        chestGui.getInventory().setItem(MConf.get().removedLoaderSlot, MConf.get().removeLoaderItem.getItemStack());
+        chestGui.setAction(MConf.get().removedLoaderSlot, new ActionDeleteLoader(this.getNPC()));
 
         return inventory;
     }

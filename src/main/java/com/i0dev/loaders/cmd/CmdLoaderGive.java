@@ -2,6 +2,9 @@ package com.i0dev.loaders.cmd;
 
 import com.i0dev.loaders.cmd.type.TypeLoader;
 import com.i0dev.loaders.entity.Loader;
+import com.i0dev.loaders.entity.MLang;
+import com.i0dev.loaders.util.Pair;
+import com.i0dev.loaders.util.Utils;
 import com.massivecraft.factions.util.MiscUtil;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.primitive.TypeInteger;
@@ -23,10 +26,13 @@ public class CmdLoaderGive extends LoadersCommand {
         Loader loader = this.readArg();
         int amount = this.readArg(1);
 
-
         player.getInventory().addItem(loader.getItemStack(amount));
-        player.sendMessage(MiscUtil.color("You have been given " + amount + " " + loader.getDisplayName() + "!"));
-        msg("&7You have given " + player.getName() + " " + amount + " " + loader.getDisplayName() + "!");
+
+        msg(Utils.prefixAndColor(MLang.get().gaveLoader,
+                new Pair<>("%player%", player.getName()),
+                new Pair<>("%amount%", String.valueOf(amount)),
+                new Pair<>("%loader%", loader.getDisplayName())
+        ));
 
     }
 }
