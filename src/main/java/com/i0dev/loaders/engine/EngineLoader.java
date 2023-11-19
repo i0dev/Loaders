@@ -78,7 +78,7 @@ public class EngineLoader extends Engine {
         SkinTrait trait = npc.getOrAddTrait(SkinTrait.class);
         trait.setFetchDefaultSkin(false);
         trait.setShouldUpdateSkins(true);
-        trait.setSkinName(faction.isSystemFaction() ? "steve" : faction.getLeader().getPlayer().getName());
+        trait.setSkinName(faction.isSystemFaction() ? "steve" : faction.getLeader().getName());
 
         npc.getOrAddTrait(LoaderTrait.class).setIDS(faction.getId(), loader.getId());
         npc.spawn(location);

@@ -24,8 +24,13 @@ import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.trait.Gravity;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageAbortEvent;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.player.PlayerHarvestBlockEvent;
 import org.bukkit.inventory.Inventory;
 
 @TraitName("loader")
