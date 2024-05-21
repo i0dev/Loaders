@@ -53,9 +53,9 @@ public class TaskSpawnParticle extends ModuloRepeatTask {
         Location min = new Location(center.getWorld(), center.getBlockX() - 16, center.getBlockY() - 16, center.getBlockZ() - 16);
         Location max = new Location(center.getWorld(), center.getBlockX() + 16, center.getBlockY() + 16, center.getBlockZ() + 16);
 
-        for (int x = min.getBlockX(); x <= max.getBlockX(); x++) {
-            for (int y = min.getBlockY(); y <= max.getBlockY(); y++) {
-                for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++) {
+        for (int x = min.getBlockX(); x <= max.getBlockX(); x += 2) {
+            for (int y = min.getBlockY(); y <= max.getBlockY(); y += 2) {
+                for (int z = min.getBlockZ(); z <= max.getBlockZ(); z += 2) {
                     // if block is on the outside edge of the cuboid
                     if (x == min.getBlockX() || x == max.getBlockX() || y == min.getBlockY() || y == max.getBlockY() || z == min.getBlockZ() || z == max.getBlockZ()) {
                         // show the block
