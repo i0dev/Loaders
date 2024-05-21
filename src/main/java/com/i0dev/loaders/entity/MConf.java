@@ -6,6 +6,7 @@ import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.EntityType;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class MConf extends Entity<MConf> {
 
     public long spawnViewTime = 30L;
     public int maxLoadersView = 5;
+
+    public EntityType loaderEntityType = EntityType.ALLAY;
 
     public int manageLoaderGuiSize = 27;
     public String manageLoaderTitle = "&aManage Loader";
@@ -91,6 +94,8 @@ public class MConf extends Entity<MConf> {
             ),
             true
     );
+
+    public String commandToGiveLeaderLoadersOnDisband = "inboxes give %player% loader-voucher %amount%";
 
 
     @Override

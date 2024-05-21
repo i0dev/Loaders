@@ -10,22 +10,24 @@ import com.i0dev.loaders.util.Utils;
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
+import com.massivecraft.factions.event.EventFactionsDisband;
 import com.massivecraft.massivecore.Engine;
 import com.massivecraft.massivecore.ps.PS;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.trait.Gravity;
 import net.citizensnpcs.trait.SkinTrait;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EngineLoader extends Engine {
 
@@ -72,8 +74,9 @@ public class EngineLoader extends Engine {
         // TODO add mperm check ? ? ?
 
         NPCRegistry registry = LoadersPlugin.get().getNpcRegistry();
-        NPC npc = registry.createNPC(EntityType.PLAYER, "&2" + faction.getName() + "'s Loader");
+        NPC npc = registry.createNPC(MConf.get().loaderEntityType, "&2" + faction.getName() + "'s Loader");
         npc.data().setPersistent(NPC.Metadata.REMOVE_FROM_PLAYERLIST, false);
+
         npc.getOrAddTrait(Gravity.class).gravitate(true);
         SkinTrait trait = npc.getOrAddTrait(SkinTrait.class);
         trait.setFetchDefaultSkin(false);
@@ -112,4 +115,28 @@ public class EngineLoader extends Engine {
         }
     }
 
+    @EventHandler
+    public void onFactionDisband(EventFactionsDisband e) {
+        Faction faction = e.getFaction();
+        NPCRegistry registry = LoadersPlugin.get().getNpcRegistry();
+        AtomicInteger count = new AtomicInteger();
+        registry.iterator().forEachRemaining(npc -> {
+            LoaderTrait trait = npc.getTraitNullable(LoaderTrait.class);
+            if (trait == null) return;
+            if (trait.getFactionID().equals(faction.getId())) {
+                npc.destroy();
+                count.getAndIncrement();
+                LoadersPlugin.get().getNpcRegistry().saveToStore();
+            }
+        });
+
+        // give back loaders to players inbox
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+                MConf.get().commandToGiveLeaderLoadersOnDisband
+                        .replace("%player%", faction.getLeader().getName())
+                        .replace("%amount%", String.valueOf(count.get()))
+        );
+
+        faction.getLeader().msg("&cYour faction has been disbanded, you have received " + count.get() + " loaders in your /inbox open");
+    }
 }
