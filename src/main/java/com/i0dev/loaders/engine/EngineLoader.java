@@ -71,19 +71,20 @@ public class EngineLoader extends Engine {
             return;
         }
 
-        // TODO add mperm check ? ? ?
+        // TODO: add mperm check ? ? ?
 
         NPCRegistry registry = LoadersPlugin.get().getNpcRegistry();
         NPC npc = registry.createNPC(MConf.get().loaderEntityType, "&2" + faction.getName() + "'s Loader");
+        npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false);
         npc.data().setPersistent(NPC.Metadata.REMOVE_FROM_PLAYERLIST, false);
 
         npc.getOrAddTrait(Gravity.class).gravitate(true);
-        SkinTrait trait = npc.getOrAddTrait(SkinTrait.class);
-        trait.setFetchDefaultSkin(false);
-        trait.setShouldUpdateSkins(true);
-        trait.setSkinName(faction.isSystemFaction() ? "steve" : faction.getLeader().getName());
+//        SkinTrait trait = npc.getOrAddTrait(SkinTrait.class);
+//        trait.setFetchDefaultSkin(false);
+//        trait.setShouldUpdateSkins(true);
+//        trait.setSkinName(faction.isSystemFaction() ? "steve" : faction.getLeader().getName());
 
-        npc.getOrAddTrait(LoaderTrait.class).setIDS(faction.getId(), loader.getId());
+        npc.getOrAddTrait(LoaderTrait.class).setIDS(faction.getId(), loader.getId(), "&2" + faction.getName() + "'s Loader");
         npc.spawn(location);
         registry.saveToStore();
 

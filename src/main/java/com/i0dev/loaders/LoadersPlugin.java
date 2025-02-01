@@ -73,7 +73,6 @@ public class LoadersPlugin extends MassivePlugin {
         return new MassiveList<>(
                 MConfColl.class,
                 MLangColl.class,
-
                 LoaderColl.class
         );
     }

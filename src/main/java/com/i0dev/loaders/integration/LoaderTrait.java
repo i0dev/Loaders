@@ -1,5 +1,6 @@
 package com.i0dev.loaders.integration;
 
+import com.i0dev.loaders.LoadersPlugin;
 import com.i0dev.loaders.action.ActionDeleteLoader;
 import com.i0dev.loaders.action.ActionShowSpawnView;
 import com.i0dev.loaders.action.ActionToggleGravity;
@@ -7,7 +8,6 @@ import com.i0dev.loaders.engine.EngineLoader;
 import com.i0dev.loaders.entity.Loader;
 import com.i0dev.loaders.entity.MConf;
 import com.i0dev.loaders.entity.MLang;
-import com.i0dev.loaders.util.ItemBuilder;
 import com.i0dev.loaders.util.Pair;
 import com.i0dev.loaders.util.Utils;
 import com.massivecraft.factions.entity.BoardColl;
@@ -18,20 +18,21 @@ import com.massivecraft.massivecore.ps.PS;
 import lombok.Getter;
 import lombok.Setter;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.trait.Gravity;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageAbortEvent;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.player.PlayerHarvestBlockEvent;
 import org.bukkit.inventory.Inventory;
+
+import java.util.UUID;
 
 @TraitName("loader")
 public class LoaderTrait extends Trait {
@@ -49,14 +50,48 @@ public class LoaderTrait extends Trait {
     @Persist
     String loaderID = null;
 
-    public void setIDS(String factionID, String loaderID) {
+    @Getter
+    @Setter
+    @Persist
+    UUID entangledLoaderID = null;
+
+    @Getter
+    @Setter
+    @Persist
+    String displayName = null;
+
+    public NPC getEntangledLoader() {
+        return LoadersPlugin.get().getNpcRegistry().getByUniqueId(entangledLoaderID);
+    }
+
+    public void setIDS(String factionID, String loaderID, String name) {
         this.factionID = factionID;
         this.loaderID = loaderID;
+        this.displayName = name;
     }
 
     @Override
     public void onRemove() {
         EngineLoader.get().unForceLoadChunks(npc.getStoredLocation(), Loader.get(loaderID).getChunkLoadRadius());
+        if (entangledLoaderID != null)
+            LoadersPlugin.get().getNpcRegistry().getByUniqueId(entangledLoaderID).destroy();
+    }
+
+    @Override
+    public void onSpawn() {
+        npc.getEntity().setInvulnerable(true);
+        ((LivingEntity) npc.getEntity()).setInvisible(true);
+
+        if (entangledLoaderID == null) {
+            NPCRegistry registry = LoadersPlugin.get().getNpcRegistry();
+            NPC entangledAllay = registry.createNPC(EntityType.ALLAY, displayName);
+            entangledAllay.setUseMinecraftAI(false);
+            entangledAllay.spawn(npc.getStoredLocation());
+            entangledAllay.getEntity().setInvulnerable(true);
+            entangledAllay.getOrAddTrait(Gravity.class).gravitate(true);
+            this.setEntangledLoaderID(entangledAllay.getUniqueId());
+            registry.saveToStore();
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
